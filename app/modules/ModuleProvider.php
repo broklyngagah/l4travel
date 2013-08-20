@@ -3,7 +3,7 @@
 namespace App\Modules;
 
 use Illuminate\Support\ServiceProvider;
-use View;
+
 
 /**
  * @package App\Modules
@@ -24,7 +24,7 @@ class ModuleProvider extends ServiceProvider
 		if($module = $this->getModule(func_get_args())) {
 			$this->modulePath = app_path() . '/modules/' . $module;
 
-			$this->package('app/', $module, $module, $this->modulePath);
+			$this->package('app/', $module, $this->modulePath);
 		}
 	}
 
@@ -35,8 +35,6 @@ class ModuleProvider extends ServiceProvider
 	public function register()
 	{
 		if ($module = $this->getModule(func_get_args())) {
-			
-			$this->modulePath = app_path() . '/modules/' . $module;
 
             $this->app['config']->package('app/' . $module, app_path() . '/modules/' . $module . '/config');
 
@@ -47,8 +45,10 @@ class ModuleProvider extends ServiceProvider
             }
 
         	// Add view location	
-        	View::addNamespace($module, $this->modulePath . '/views');
+        	$this->app['view']->addNamespace($module, $this->modulePath . '/views');
         }
+
+        //echo '<pre>', print_r($this->app['view']), '</pre>'; die;
 	}
 
 	/**
